@@ -1,0 +1,19 @@
+<table class="table table-striped">
+  <tr>
+    <th>Id</th>
+    <th>Firstname</th>
+    <th>Lastname</th>
+    <th>Actions</th>
+  </tr>
+  <tr *ngFor="let student of students; let i = index">
+    <td>{{ student.id }}</td>
+    <td>{{ student.firstname }}</td>
+    <td>{{ student.lastname  }}</td>
+    <td> 
+      <div class="btn-toolbar"> 
+        <button class="btn btn-primary" (click)="onViewDetails(student)">View</button> 
+        <button class="btn btn-danger" (click)="onDelete(i, student)">Delete</button> 
+      </div>
+    </td>
+  </tr>
+</table>

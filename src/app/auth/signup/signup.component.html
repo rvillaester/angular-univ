@@ -1,0 +1,50 @@
+<div id="signupbox" class="mainbox col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
+  <div class="panel panel-info">
+    <div class="panel-heading">
+      <div class="panel-title">Sign Up</div>
+      <div style="float:right; font-size: 85%; position: relative; top:-10px"><a id="signinlink" href="#" routerLink="/signin">Sign In</a></div>
+    </div>  
+    <div class="panel-body">
+      <form id="signupform" class="form-horizontal" role="form" (ngSubmit)="onSignup(f)" #f="ngForm">    
+        <div class="form-group">
+          <label for="firstname" class="col-md-4 control-label">Name</label>
+          <div class="col-md-8">
+            <input type="text" class="form-control" name="name" placeholder="Name" ngModel required>
+          </div>
+        </div>         
+        <div class="form-group">
+          <label for="email" class="col-md-4 control-label">Email</label>
+          <div class="col-md-8">
+            <input type="text" class="form-control" name="email" placeholder="Email" ngModel required required pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="lastname" class="col-md-4 control-label">Username</label>
+          <div class="col-md-8">
+            <input type="text" class="form-control" name="username" placeholder="Username" ngModel required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="password" class="col-md-4 control-label">Password</label>
+          <div class="col-md-8">
+            <input type="password" class="form-control" id="password" name="password" placeholder="Password" ngModel required> 
+          </div>
+        </div>
+              
+        <div class="form-group">
+          <label for="confPassword" class="col-md-4 control-label">Confirm Password</label>
+          <div class="col-md-8">
+            <input type="password" class="form-control" id="confPassword" name="confPassword" placeholder="Password" ngModel required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div class="col-sm-12 controls btn-toolbar">
+            <button class="btn btn-primary" type="submit" [disabled]="!f.valid">Sign Up</button>
+            <button class="btn btn-link" type="button" (click)="onCancel()">Cancel</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div> 
