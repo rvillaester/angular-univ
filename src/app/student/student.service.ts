@@ -1,34 +1,30 @@
 import { Observable, Subject } from "rxjs";
 import { Student } from "./student.model";
-import { HttpClient, HttpParams } from "@angular/common/http";
+import { HttpClient, HttpParams, HttpEventType } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 
 const SEARCH_STUDENT = 'https://5c2h8ya5re.execute-api.ap-southeast-1.amazonaws.com/dev/search-student';
 const UPDATE_STUDENT = 'https://5c2h8ya5re.execute-api.ap-southeast-1.amazonaws.com/dev/update-student';
 const DELETE_STUDENT = 'https://5c2h8ya5re.execute-api.ap-southeast-1.amazonaws.com/dev/delete-student';
 const ADD_STUDENT = 'https://5c2h8ya5re.execute-api.ap-southeast-1.amazonaws.com/dev/put-student';
+const PUT_IMAGE = 'https://8q3sh3itzl.execute-api.ap-southeast-1.amazonaws.com/dev/putToS3';
+const GET_IMAGE = 'https://8q3sh3itzl.execute-api.ap-southeast-1.amazonaws.com/dev/getFromS3';
 
 @Injectable()
 export class StudentService{
 
-    private selectedStudent: Student;
     students: Student[] = [];
     addStudentSubject = new Subject<string>();
     studentsChanged = new Subject<Student[]>();
 
     constructor(private httpClient: HttpClient){}
 
-    addStudent(student: Student){
-        this.httpClient.post<Student>(ADD_STUDENT, student)
-            .subscribe(
-                (data: any) => {
-                    this.addStudentSubject.next(data.id);
-                }
-            );
+    async addStudent(student: Student): Promise<any>{
+        return await this.httpClient.post<Student>(ADD_STUDENT, student).toPromise();
     }
 
-    updateStudent(student: Student): Observable<any> | Promise<any>{
-        return this.httpClient.post<Student>(UPDATE_STUDENT, student);
+    async updateStudent(student: Student): Promise<any>{
+        return await this.httpClient.post<Student>(UPDATE_STUDENT, student).toPromise();
     }
 
     deleteStudent(index: number, student: Student){
@@ -41,6 +37,14 @@ export class StudentService{
             );
     }
 
+    async searchStudentByIdAsync(id: string): Promise<any>{
+        let params = new HttpParams()
+            .set('searchBy', 'id')
+            .set('id', id);
+        return await this.httpClient.get(SEARCH_STUDENT, {params}).toPromise();
+
+    }
+
     searchStudentById(id: string){
         let params = new HttpParams()
             .set('searchBy', 'id')
@@ -48,7 +52,8 @@ export class StudentService{
         this.httpClient.get(SEARCH_STUDENT, {params})
             .subscribe(
                 (data: any) => {
-                    this.processResults(data);
+                    this.students = data.items;
+                    this.studentsChanged.next(this.students);
                 }
             );
     }
@@ -61,29 +66,20 @@ export class StudentService{
         this.httpClient.get(SEARCH_STUDENT, {params})
             .subscribe(
                 (data: any) => {
-                    this.processResults(data);
+                    this.students = data.items;
+                    this.studentsChanged.next(this.students);
                 }
             );
     }
 
-    private processResults(data){
-        this.students = data.items;
-        this.studentsChanged.next(this.students);
+    uploadImage(data){
+        return this.httpClient.post<any>(PUT_IMAGE, data);
     }
 
-    hasLoadedStudent(){
-        return this.selectedStudent !== null;
-    }
-
-    clearSelectedStudent(){
-        this.selectedStudent = null;
-    }
-
-    setSelectedStudent(student: Student){
-        this.selectedStudent = student;
-    }
-
-    getSelectedStudent(){
-        return this.selectedStudent;
+    getAvatar(student: Student): string{
+        if(!student.base64EncodedAvatar){
+          return 'http://www.prairieskychamber.ca/wp-content/uploads/2016/10/person-placeholder-image-3.jpg';
+        }
+        return 'data:image/png;base64,' + student.base64EncodedAvatar;
     }
 }

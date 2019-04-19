@@ -5,9 +5,9 @@
     <div class="panel-body">
       <div class="row">
         <div class="col-md-3 col-lg-3 " align="center"> 
-          <img alt="User Pic" src="http://www.prairieskychamber.ca/wp-content/uploads/2016/10/person-placeholder-image-3.jpg" class="img-circle img-responsive">
+          <img alt="User Pic" src="{{ studentService.getAvatar(student) }}" class="img-circle img-responsive">
           <h6>Upload a different photo...</h6>
-          <input type="file" class="text-center center-block file-upload">
+          <input type="file" class="text-center center-block file-upload" (change)="onImageChange($event)">
         </div>
         <div class=" col-md-9 col-lg-9 "> 
           <table class="table table-user-information">

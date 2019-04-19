@@ -14,67 +14,64 @@ export class StudentEditComponent implements OnInit {
 
   form: FormGroup;
   editMode = false;
+  id: string;
 
   constructor(private route: ActivatedRoute, private router: Router, private studentService: StudentService) { }
 
   ngOnInit() {
-    this.editMode = this.studentService.hasLoadedStudent();
+    this.editMode = false;
+    this.id = this.route.snapshot.params['id'];
+    if(this.id){
+      this.editMode = true;
+    }
     this.initForm();
-    this.studentService.addStudentSubject
-      .subscribe(
-        (id: string) => {
-          let student = this.form.value;
-          student.id = id;
-          console.log(id);
-          this.studentService.setSelectedStudent(student);
-          this.router.navigate(['/student/detail']);
-        }
-      );
   }
 
   onSubmit(){
     let student = this.form.value;
-    console.log(student.id);
+    console.log(this.form.get('firstname'));
     if(!this.editMode){
-      this.studentService.addStudent(student);
-    }else{
-      (<Observable<any>>this.studentService.updateStudent(student))
-        .subscribe(
+      this.studentService.addStudent(student)
+        .then(
             (data: any) => {
-              console.log(data);
-              this.studentService.setSelectedStudent(student);
-              this.router.navigate(['/student/detail']);
+              this.router.navigate(['student', data.id]);
             }
         );
-
+    }else{
+      this.studentService.updateStudent(student)
+        .then(
+            (data: any) => {
+              this.router.navigate(['student', student.id]);
+            }
+        );
     }
   }
 
   onCancel(){
     if(this.editMode){
-      this.router.navigate(['/student/detail']);
+      this.router.navigate(['student', this.id]);
     }else{
-      this.router.navigate(['/student']);
+      this.router.navigate(['student']);
     }
   }
 
   private initForm(){
-    let id = '';
-    let firstname = '';
-    let lastname = '';
-    let email = '';
-    let gender = '';
-    let address = '';
-
     if(this.editMode){
-      let student = this.studentService.getSelectedStudent();
-      id = student.id;
-      firstname = student.firstname;
-      lastname = student.lastname;
-      email = student.email;
-      gender = student.gender;
-      address = student.address;
+      var prom = this.studentService.searchStudentByIdAsync(this.id);
+      prom.then (
+        (data: any) => {
+          if(data.items){
+            var student = data.items[0];
+            this.createForm(student.id, student.firstname, student.lastname, student.email, student.gender, student.address);
+          }
+        }
+      );
+    } else{
+      this.createForm('', '', '', '', '', '');
     }
+  }
+
+  private createForm(id, firstname, lastname, email, gender, address){
     this.form = new FormGroup({
       'id': new FormControl(id),
       'firstname': new FormControl(firstname, Validators.required),
@@ -84,5 +81,4 @@ export class StudentEditComponent implements OnInit {
       'address': new FormControl(address)
     });
   }
-
 }

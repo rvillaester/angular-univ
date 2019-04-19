@@ -26,8 +26,7 @@ export class StudentListComponent implements OnInit {
   }
   
   onViewDetails(student: Student){
-    this.studentService.setSelectedStudent(student);
-    this.router.navigate(['detail'], {relativeTo: this.route});
+    this.router.navigate([student.id], {relativeTo: this.route});
   }
 
   onDelete(index: number, student: Student){

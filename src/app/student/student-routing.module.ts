@@ -10,8 +10,8 @@ const studentRoutes: Routes = [
   { path: '', component: StudentComponent, children: [
     { path: '', component: StudentHomeComponent},
     { path: 'new', component: StudentEditComponent, canActivate: [AuthGuard] },
-    { path: 'detail', component: StudentDetailComponent, canActivate: [AuthGuard] },
-    { path: 'edit', component: StudentEditComponent, canActivate: [AuthGuard] },
+    { path: ':id', component: StudentDetailComponent, canActivate: [AuthGuard] },
+    { path: ':id/edit', component: StudentEditComponent, canActivate: [AuthGuard] },
   ] },
 ];
 

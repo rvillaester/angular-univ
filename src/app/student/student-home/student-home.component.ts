@@ -42,7 +42,6 @@ export class StudentHomeComponent implements OnInit {
   }
 
   onAddStudent(){
-    this.studentService.clearSelectedStudent();
     this.router.navigate(['new'], {relativeTo: this.route});
   }
 
