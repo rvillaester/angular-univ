@@ -6,6 +6,6 @@ export class Student{
     birthdate: Date;
     email: string;
     gender: string;
-    base64EncodedAvatar: string;
+    base64EncodedAvatar: any;
     avatar: string = 'http://www.prairieskychamber.ca/wp-content/uploads/2016/10/person-placeholder-image-3.jpg';
 }

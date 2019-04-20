@@ -5,7 +5,7 @@
     <div class="panel-body">
       <div class="row">
         <div class="col-md-3 col-lg-3 " align="center"> 
-          <img alt="User Pic" src="{{ studentService.getAvatar(student) }}" class="img-circle img-responsive">
+          <img alt="User Pic" [src]="student.base64EncodedAvatar" class="img-circle img-responsive">
           <h6>Upload a different photo...</h6>
           <input type="file" class="text-center center-block file-upload" (change)="onImageChange($event)">
         </div>
@@ -38,7 +38,6 @@
               </tr>
             </tbody>
           </table>
-          
           <a class="btn btn-primary" (click)="onEdit()">Edit</a>
           <a class="btn btn-link" (click)="onCancel()">Cancel</a>
         </div>

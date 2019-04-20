@@ -16,6 +16,7 @@ export class StudentService{
     students: Student[] = [];
     addStudentSubject = new Subject<string>();
     studentsChanged = new Subject<Student[]>();
+    studentImageChanged = new Subject<string>();
 
     constructor(private httpClient: HttpClient){}
 
@@ -72,14 +73,30 @@ export class StudentService{
             );
     }
 
-    uploadImage(data){
-        return this.httpClient.post<any>(PUT_IMAGE, data);
+    uploadAvatar(id: string, base64EncodedImage: string){
+        let data = {
+            "data": base64EncodedImage
+        };
+        let params = new HttpParams().set('key', id);
+        this.httpClient.post<any>(PUT_IMAGE, data, 
+            {
+                params: params
+            }).subscribe(
+                (response: any) => {
+                    console.log(response);
+                }
+            );
     }
 
-    getAvatar(student: Student): string{
-        if(!student.base64EncodedAvatar){
-          return 'http://www.prairieskychamber.ca/wp-content/uploads/2016/10/person-placeholder-image-3.jpg';
-        }
-        return 'data:image/png;base64,' + student.base64EncodedAvatar;
+    getAvatar(id: string) {
+        let params = new HttpParams().set('key', id);
+        this.httpClient.get<any>(GET_IMAGE, {params}).subscribe(
+            (result: any) => {
+                this.studentImageChanged.next(result.Body.data);
+            },
+            (error: any) => {
+                console.log(error);
+            }
+        );
     }
 }
