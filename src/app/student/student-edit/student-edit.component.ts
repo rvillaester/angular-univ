@@ -1,9 +1,7 @@
-import { Component, OnInit, Input, ComponentFactoryResolver } from '@angular/core';
-import { NgForm, FormGroup, FormControl, Validators } from '@angular/forms';
-import { Student } from '../student.model';
-import { Router, ActivatedRoute, Params } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { Router, ActivatedRoute, Data } from '@angular/router';
 import { StudentService } from '../student.service';
-import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-student-edit',
@@ -29,7 +27,6 @@ export class StudentEditComponent implements OnInit {
 
   onSubmit(){
     let student = this.form.value;
-    console.log(this.form.get('firstname'));
     if(!this.editMode){
       this.studentService.addStudent(student)
         .then(
@@ -57,13 +54,26 @@ export class StudentEditComponent implements OnInit {
 
   private initForm(){
     if(this.editMode){
-      var prom = this.studentService.searchStudentByIdAsync(this.id);
-      prom.then (
-        (data: any) => {
-          if(data.items){
-            var student = data.items[0];
-            this.createForm(student.id, student.firstname, student.lastname, student.email, student.gender, student.address);
-          }
+      /**
+       * Get student via the service
+       */
+      // var prom = this.studentService.searchStudentByIdAsync(this.id);
+      // prom.then (
+      //   (data: any) => {
+      //     if(data.items){
+      //       var student = data.items[0];
+      //       this.createForm(student.id, student.firstname, student.lastname, student.email, student.gender, student.address);
+      //     }
+      //   }
+      // );
+
+      /**
+       * Get student via the resolver - the preferred way
+       */
+      this.route.data.subscribe(
+        (data: Data) => {
+          var student = data['student'];
+          this.createForm(student.id, student.firstname, student.lastname, student.email, student.gender, student.address);
         }
       );
     } else{

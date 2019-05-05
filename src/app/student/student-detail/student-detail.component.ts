@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router, Params } from '@angular/router';
+import { ActivatedRoute, Router, Data } from '@angular/router';
 import { Student } from '../student.model';
 import { StudentService } from '../student.service';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -18,13 +18,27 @@ export class StudentDetailComponent implements OnInit {
 
   ngOnInit() {
     this.id = this.route.snapshot.params['id'];
-    var prom = this.studentService.searchStudentByIdAsync(this.id);
-    prom.then (
-      (data: any) => {
-        if(data.items){
-          this.student = data.items[0];
-          this.student.base64EncodedAvatar = 'http://www.prairieskychamber.ca/wp-content/uploads/2016/10/person-placeholder-image-3.jpg';
-        }
+
+    /**
+     * Get student via the service
+     */
+    // var prom = this.studentService.searchStudentByIdAsync(this.id);
+    // prom.then (
+    //   (data: any) => {
+    //     if(data.items){
+    //       this.student = data.items[0];
+    //       this.student.base64EncodedAvatar = 'http://www.prairieskychamber.ca/wp-content/uploads/2016/10/person-placeholder-image-3.jpg';
+    //     }
+    //   }
+    // );
+    
+    /**
+     * Get student via the resolver - the preferred way
+     */
+    this.route.data.subscribe(
+      (data: Data) => {
+        this.student = data['student'];
+        this.student.base64EncodedAvatar = 'http://www.prairieskychamber.ca/wp-content/uploads/2016/10/person-placeholder-image-3.jpg';
       }
     );
 

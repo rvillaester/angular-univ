@@ -12,11 +12,13 @@ import { AuthService } from './auth/auth.service';
 import { TokenInterceptor } from './shared/token.interceptor';
 import { HttpService } from './shared/http.service';
 import { FormsModule } from '@angular/forms';
+import { ErrorPageComponent } from './error-page/error-page.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    FacultyComponent
+    FacultyComponent,
+    ErrorPageComponent
   ],
   imports: [
     BrowserModule,

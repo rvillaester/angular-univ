@@ -9,6 +9,7 @@ import { StudentRoutingModule } from './student-routing.module';
 import { StudentHomeComponent } from './student-home/student-home.component';
 import { StudentService } from './student.service';
 import { StudentListComponent } from './student-list/student-list.component';
+import { StudentResolver } from './student-resolver';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,7 @@ import { StudentListComponent } from './student-list/student-list.component';
     SharedModule
   ],
   providers: [
-    StudentService
+    StudentService, StudentResolver
   ]
 })
 export class StudentModule {}

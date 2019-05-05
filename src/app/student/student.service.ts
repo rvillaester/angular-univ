@@ -1,6 +1,6 @@
-import { Observable, Subject } from "rxjs";
+import { Subject } from "rxjs";
 import { Student } from "./student.model";
-import { HttpClient, HttpParams, HttpEventType } from "@angular/common/http";
+import { HttpClient, HttpParams} from "@angular/common/http";
 import { Injectable } from "@angular/core";
 
 const SEARCH_STUDENT = 'https://5c2h8ya5re.execute-api.ap-southeast-1.amazonaws.com/dev/search-student';
@@ -43,7 +43,6 @@ export class StudentService{
             .set('searchBy', 'id')
             .set('id', id);
         return await this.httpClient.get(SEARCH_STUDENT, {params}).toPromise();
-
     }
 
     searchStudentById(id: string){
