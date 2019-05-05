@@ -13,6 +13,8 @@ import { TokenInterceptor } from './shared/token.interceptor';
 import { HttpService } from './shared/http.service';
 import { FormsModule } from '@angular/forms';
 import { ErrorPageComponent } from './error-page/error-page.component';
+import { AuthGuard } from './auth/auth-guard.service';
+import { CanDeactivateGuard } from './shared/can-deactivate-guard';
 
 @NgModule({
   declarations: [
@@ -30,6 +32,8 @@ import { ErrorPageComponent } from './error-page/error-page.component';
     FormsModule
   ],
   providers: [
+    AuthGuard, 
+    CanDeactivateGuard,
     AuthService,
     HttpService,
     {

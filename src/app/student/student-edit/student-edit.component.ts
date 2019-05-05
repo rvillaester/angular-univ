@@ -2,17 +2,20 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router, ActivatedRoute, Data } from '@angular/router';
 import { StudentService } from '../student.service';
+import { CanComponentDeactivate } from 'src/app/shared/can-deactivate-guard';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-student-edit',
   templateUrl: './student-edit.component.html',
   styleUrls: ['./student-edit.component.css']
 })
-export class StudentEditComponent implements OnInit {
+export class StudentEditComponent implements OnInit, CanComponentDeactivate {
 
   form: FormGroup;
-  editMode = false;
+  editMode: boolean = false;
   id: string;
+  changeSaved: boolean = false;
 
   constructor(private route: ActivatedRoute, private router: Router, private studentService: StudentService) { }
 
@@ -42,6 +45,7 @@ export class StudentEditComponent implements OnInit {
             }
         );
     }
+    this.changeSaved = true;
   }
 
   onCancel(){
@@ -50,6 +54,13 @@ export class StudentEditComponent implements OnInit {
     }else{
       this.router.navigate(['student']);
     }
+  }
+
+  canDeactivate(): Observable<boolean> | Promise<boolean> | boolean{
+    if(!this.changeSaved && this.form.dirty){
+      return confirm('Do you want to discard the changes?');
+    }
+    return true;
   }
 
   private initForm(){
